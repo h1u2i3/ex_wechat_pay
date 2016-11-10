@@ -1,0 +1,17 @@
+//----------------------
+//  Company transfer
+//----------------------
+
+# Send coupon to user
+name: create_transfer
+cert: true
+path: /mmpaymkttransfers/promotion/transfers
+required: mch_appid, mchid, nonce_str, sign, partner_trade_no, openid, check_name, re_user_name, amount, desc, spbill_create_ip
+optional: device_info
+
+# Query coupon stock
+name: query_transfer
+cert: false
+path: /mmpaymkttransfers/gettransferinfo
+required: appid, mch_id, nonce_str, sign, partner_trade_no
+optional:

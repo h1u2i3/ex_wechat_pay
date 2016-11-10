@@ -31,7 +31,7 @@ defmodule ExWechatPay.Api do
 
       defp validate(body, _path) do
         body
-        |> validate_transaction_id
+        |> validate_body
         |> validate_jsapi
         |> generate_miss_keys
         |> validate_presence

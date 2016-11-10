@@ -1,0 +1,24 @@
+//----------------------
+//    RedPack
+//----------------------
+
+# Send normal redpack to user
+name: send_redpack
+cert: true
+path: /mmpaymkttransfers/sendredpack
+required: nonce_str, sign, mch_billno, mch_id, wxappid, send_name, re_openid, total_amount, total_num, wishing, client_ip, act_name, remark
+optional: scene_id, risk_info, consume_mch_id
+
+# Send lie bian redpack. groupredpack
+name: send_group_redpack
+cert: true
+path: /mmpaymkttransfers/sendgroupredpack
+required: nonce_str, sign, mch_billno, mch_id, wxappid, send_name, re_openid, total_amount, total_num, amt_type, wishing, act_name, remark
+optional: scene_id, risk_info, consume_mch_id
+
+# Query Redpack sent list
+name: query_redpack
+cert: true
+path: /mmpaymkttransfers/gethbinfo
+required: nonce_str, sign, mch_billno, mch_id, appid, bill_type
+optional:

@@ -1,0 +1,31 @@
+//----------------------
+//    Tool
+//----------------------
+
+# Get short url
+name: shorturl
+cert: false
+path: /tools/shorturl
+required: appid, mch_id, long_url, nonce_str, sign
+optional: sign_type
+
+# Get user openid
+name: get_openid
+cert: false
+path: /tools/authcodetoopenid
+required: appid, mch_id, auth_code, nonce_str, sign
+optional:
+
+# Download bill list
+name: download_bill_list
+cert: false
+path: /pay/downloadbill
+required: appid, mch_id, nonce_str, sign, bill_date, bill_type
+optional: device_info, sign_type, tar_type
+
+# Report to Wechat Server
+name: report_payitil
+cert: false
+path: /payitil/report
+required: appid, mch_id, nonce_str, sign, interface_url, user_ip, trades
+optional: device_info

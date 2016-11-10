@@ -1,5 +1,5 @@
 //----------------------
-//    public pay
+//    Order
 //----------------------
 
 # Create prepay order (can pay with JSAPI, APP)
@@ -30,9 +30,9 @@ path: /secapi/pay/refund
 required: appid, mch_id, nonce_str, sign, transaction_id, out_trade_no, out_refund_no, total_fee, refund_fee, op_user_id
 optional: device_info, sign_type, refund_fee_type, refund_account
 
-# Download bill list
-name: download_bill_list
+# Query for refund
+name: query_refund_order
 cert: false
-path: /pay/downloadbill
-required: appid, mch_id, nonce_str, sign, bill_date, bill_type
-optional: device_info, sign_type, tar_type
+path: /pay/refundquery
+required: appid, mch_id, nonce_str, sign, transaction_id, out_trade_no, out_refund_no, refund_id
+optional: device_info, sign_type
