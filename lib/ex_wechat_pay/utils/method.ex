@@ -1,56 +1,71 @@
 defmodule ExWechatPay.Utils.Method do
   use ExWechatPay.Base
 
-  def define_method(method_data) do
+  @doc """
+    Define methods base on the api definition data.
+  """
+  def define_methods(method_map) do
+    _define_methods(method_map, [], [], [])
+  end
+
+  defp _define_methods(method_map, required_methods, all_fields_methods, request_methods)
+
+  defp _define_methods([], required_methods, all_fields_methods, request_methods) do
+    all_fields_methods = all_fields_methods ++ [quote do: def all_fields(_), do: []]
+    required_methods = required_methods ++ [quote do: def required_methods(_), do: []]
+    methods = quote do
+      defp do_request(path, body, cert \\ false)
+      defp do_request(path, body, true),  do: post(path, body, [], ssl: [certfile: unquote(_cert)]) |> parse_response(path, body, true)
+      defp do_request(path, body, false), do: post(path, body) |> parse_response(path, body, false)
+
+      defp parse_response(response, path, body, cert)
+      defp parse_response({:ok, response}, _path, _body, _cert), do: response.body
+      defp parse_response({:error, %HTTPoison.Error{reason: :close}}, path, body, cert), do: do_request(path, body, cert)
+      defp parse_response({:error, error}, _, _, _), do: %{error: error.reason}
+    end
+    required_methods ++ all_fields_methods ++ request_methods ++ [methods]
+  end
+
+  defp _define_methods(method_map, [], [], []) do
+    required_method = quote do: def required_fields(path)
+    all_fields_method = quote do: def all_fields(path)
+    _define_methods(method_map, [required_method], [all_fields_method], [])
+  end
+
+  defp _define_methods([item | tail], required_methods, all_fields_methods, request_methods) do
     %{doc: doc, path: path, name: name, cert: cert,
-      required: required, optional: optional} = method_data
+      required: required, optional: optional} = item
+    required_method = define_required_method(path, required)
+    all_fields_method = define_all_fields_method(path, required, optional)
+    request_method = define_request_method(doc, name, path, cert)
+    _define_methods(tail, required_methods ++ [required_method],
+                    all_fields_methods ++ [all_fields_method], request_methods ++ [request_method])
+  end
+
+  defp define_request_method(doc, name, path, cert) do
     quote do
-      @doc false
-      def required_fields(path) do
-        unquote(Enum.map(required, &String.to_atom/1))
-      end
-
-      @doc false
-      def all_fields(path) do
-        unquote(Enum.map(required ++ optional, &String.to_atom/1))
-      end
-
-      @doc false
-      def ssl_post(path, body) do
-        case post(path, body, [], ssl: [certfile: unquote(_cert)]) do
-          {:ok, response} -> response.body
-          {:error, error} ->
-            case error.reason do
-              :close  ->  post(path, body, [], ssl: [certfile: unquote(_cert)])
-              _       ->  %{error: error.reason}
-            end
-        end
-      end
-
-      @doc false
-      def normal_post(path, body) do
-        case post(path, body) do
-          {:ok, response} -> response.body
-          {:error, error} ->
-            case error.reason do
-              :close  ->  post(path, body)
-              _       ->  %{error: error.reason}
-            end
-        end
-      end
-
-      @doc """
-        #{unquote(doc)}
-      """
+      @doc unquote(doc)
       def unquote(name)(post_map) do
         case render(unquote(path), post_map) do
-          {:ok, body} ->
-            case unquote(cert) do
-              :true -> ssl_post(unquote(path |> String.replace("_", "/")), body)
-              :false -> normal_post(unquote(path |> String.replace("_", "/")), body)
-            end
+          {:ok, body}      -> do_request(unquote(path), body, unquote(cert))
           {:error, reason} -> {:error, reason}
         end
+      end
+    end
+  end
+
+  defp define_required_method(path, required) do
+    quote do
+      def required_fields(unquote(path) = path) do
+        unquote(required)
+      end
+    end
+  end
+
+  defp define_all_fields_method(path, required, optional) do
+    quote do
+      def all_fields(unquote(path) = path) do
+        unquote(required ++ optional)
       end
     end
   end

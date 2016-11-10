@@ -60,10 +60,7 @@ defmodule ExWechatPay.Api do
 
   @doc false
   def compile(origin) do
-    ast_data = for item <- origin do
-                 define_method(item)
-               end
-
+    ast_data = define_methods(origin)
     quote do
       unquote(ast_data)
     end

@@ -1,6 +1,6 @@
 # ExWechatPay
 
-**TODO: Add description**
+Still in development.
 
 ## Installation
 
