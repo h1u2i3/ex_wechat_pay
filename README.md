@@ -26,8 +26,10 @@ If you want to use, the package can be installed as:
       sandbox: false
     ```
 
-## Usage(If you want to use, because still in development, just import the `_query_order` method, but it should work)
+## Usage
 
+  1. If you want to use, because still in development, just import the `_query_order` method, but it should work
+    
     ```elixir
     iex> ExWechatPay.Order._query_order %{out_trade_no: 1478757610795189}
     %{appid: "wx65fd9eeccd53f1a1", attach: "", bank_type: "CFT", cash_fee: "10000",
