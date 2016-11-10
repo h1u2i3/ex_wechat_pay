@@ -2,9 +2,37 @@
 //    public pay
 //----------------------
 
-# create prepay order (can pay with JSAPI, APP)
+# Create prepay order (can pay with JSAPI, APP)
 name: create_order
 cert: false
 path: /pay/unifiedorder
 required: appid, mch_id, nonce_str, sign, body, out_trade_no, total_fee, spbill_create_ip, notify_url, trade_type
 optional: device_info, sign_type, detail, attach, fee_type, time_start, time_expire, goods_tag, product_id, limit_pay, openid
+
+# Query for oder, need transation_id or out_trade_no
+name: query_order
+cert: false
+path: /pay/orderquery
+required: appid, mch_id, transaction_id, out_trade_no, nonce_str, sign
+optional: sign_type
+
+# Close order before pay
+name: close_order
+cert: false
+path: /pay/closeorder
+required: appid, mch_id, out_trade_no, nonce_str, sign
+optional: sign_type
+
+# Refund order
+name: refund_order
+cert: true
+path: /secapi/pay/refund
+required: appid, mch_id, nonce_str, sign, transaction_id, out_trade_no, out_refund_no, total_fee, refund_fee, op_user_id
+optional: device_info, sign_type, refund_fee_type, refund_account
+
+# Download bill list
+name: download_bill_list
+cert: false
+path: /pay/downloadbill
+required: appid, mch_id, nonce_str, sign, bill_date, bill_type
+optional: device_info, sign_type, tar_type

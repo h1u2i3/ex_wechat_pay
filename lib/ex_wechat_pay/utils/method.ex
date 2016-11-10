@@ -15,8 +15,14 @@ defmodule ExWechatPay.Utils.Method do
     required_methods = required_methods ++ [quote do: def required_methods(_), do: []]
     methods = quote do
       defp do_request(path, body, cert \\ false)
-      defp do_request(path, body, true),  do: post(path, body, [], ssl: [certfile: unquote(_cert)]) |> parse_response(path, body, true)
-      defp do_request(path, body, false), do: post(path, body) |> parse_response(path, body, false)
+      defp do_request(path, body, true) do
+        post(path, body, [], ssl: [certfile: unquote(_cert), keyfile: unquote(_cert_key)])
+        |> parse_response(path, body, true)
+      end
+      defp do_request(path, body, false) do
+        post(path, body)
+        |> parse_response(path, body, false)
+      end
 
       defp parse_response(response, path, body, cert)
       defp parse_response({:ok, response}, _path, _body, _cert), do: response.body

@@ -24,7 +24,9 @@ use Mix.Config
 config :ex_wechat_pay, ExWechatPay,
   appid: "ssdadadsa",
   mch_id: "dldlsallslsl",
-  cert: "xxxx",
+  cert: "your_cert_file",
+  cert_key: "your_cert_key_file"
+  cert_password: "your_cert_key_password"
   appkey: "xxxxx",
   sandbox: true
 

@@ -44,9 +44,10 @@ defmodule ExWechatPay.Api do
         end
       end
 
-      defp process_response_body(body) do
-        parse_xml(body)
-      end
+      defp process_response_body(body)
+      defp process_response_body("<xml>" <> _ = body), do: parse_xml(body)
+      defp process_response_body("{"     <> _ = body), do: Poison.decode!(body)
+      defp process_response_body(body),                do: body
 
       defoverridable [validate: 2]
     end

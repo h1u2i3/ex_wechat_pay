@@ -11,7 +11,7 @@ defmodule ExWechatPay.Utils.PostBody do
 
   def cast(map, keys),                   do: __MODULE__ |> struct(map: map |> Map.take(keys))
   def required(body, keys),              do: body |> struct(required: keys)
-  def add_config_data(body),             do: body |> add_item({:appid, _appid}) |> add_item({:mch_id, _mch_id})
+  def add_config_data(body),             do: body |> add_item({:appid, _appid}) |> add_item({:mch_id, _mch_id}) |> add_item({:op_user_id, _mch_id})
   def add_nonce_str(body),               do: body |> struct(map: body.map |> generate_nonce_str)
   def generate_miss_keys(body),          do: body |> struct(miss: body.required -- (Map.keys(body.map) ++ [:sign]))
 
@@ -39,7 +39,8 @@ defmodule ExWechatPay.Utils.PostBody do
   def render_body(%PostBody{valid?: true } = body), do: {:ok,    body.map |> render_xml}
   def render_body(%PostBody{valid?: false} = body), do: {:error, body.reason}
 
-  defp add_item(body, {key, value}),      do: body |> struct(map: body.map |> Map.put(key, value))
+  defp add_item(body, {key, value}),      do: if item?(body, key), do: body |> struct(map: body.map |> Map.put(key, value)), else: body
+  defp item?(body, key),                  do: Enum.member?(body.required, key) && !Enum.member?(body.map, key)
   defp add_required(body, key),           do: body |> struct(required: body.required ++ [key])
   defp add_error(body, reason),           do: body |> struct(valid?: false, reason: reason)
   defp remove_item(body, key),            do: body |> struct(map: body.map |> Map.delete(key))

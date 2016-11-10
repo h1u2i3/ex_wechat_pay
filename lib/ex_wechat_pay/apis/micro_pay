@@ -1,0 +1,24 @@
+//----------------------
+//    Micro pay
+//----------------------
+
+# Create Micropay order
+name: create_micropay
+cert: false
+path: /pay/micropay
+required: appid, mch_id, nonce_str, sign, body, out_trade_no, total_fee, spbill_create_ip, auth_code
+optional: device_info, sign_type, detail, attach, fee_type, goods_tag
+
+# Query for MiroPay order, need transation_id or out_trade_no
+name: query_micropay
+cert: false
+path: /pay/orderquery
+required: appid, mch_id, transaction_id, out_trade_no, nonce_str, sign
+optional: sign_type
+
+# Cancel MicroPay order, should be called after 15 seconds
+name: cancel_micropay
+cert: true
+path: /secapi/pay/reverse
+required: appid, mch_id, transaction_id, out_trade_no, nonce_str, sign
+optional: sign_type
