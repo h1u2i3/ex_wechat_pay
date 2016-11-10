@@ -1,0 +1,3 @@
+defmodule ExWechatPay do
+  
+end

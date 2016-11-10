@@ -1,0 +1,9 @@
+//----------------------
+//    demo pay
+//----------------------
+
+# test generate code
+name: create_demo_pay
+path: /pay/demo
+required: appid, mch_id, nonce_str, sign, body, out_trade_no
+optional: device_info, sign_type, detail, attach, fee_type
