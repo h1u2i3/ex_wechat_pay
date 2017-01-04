@@ -1,6 +1,17 @@
 defmodule ExWechatPay.Base do
+  @empty [
+    appid: nil,
+    mch_id: nil,
+    cert: nil,
+    cert_key: nil,
+    appkey: nil,
+    sandbox: nil
+  ]
+
   defmacro __using__(_opts) do
-    for {key, value} <- Application.get_env(:ex_wechat_pay, ExWechatPay) do
+    configs =
+      Application.get_env(:ex_wechat_pay, ExWechatPay) || @empty
+    for {key, value} <- configs do
       quote do
         defp unquote(method_name(key))() do
           unquote(value)
@@ -10,7 +21,7 @@ defmodule ExWechatPay.Base do
   end
 
   defp method_name(key) do
-    "_" <> Atom.to_string(key)
+    "_#{key}"
     |> String.to_atom
   end
 end

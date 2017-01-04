@@ -16,24 +16,22 @@ defmodule ExWechatPay.ApiTest do
   }
 
   test "should generate right method" do
-    demo_all = ExWechatPay.DemoPay._pay_demo
-    demo_required = ExWechatPay.DemoPay._pay_demo_required
-    demo_optional = ExWechatPay.DemoPay._pay_demo_optional
+    demo_all = ExWechatPay.DemoPay.all_fields("/pay/demo")
+    demo_required = ExWechatPay.DemoPay.required_fields("/pay/demo")
 
     assert demo_all == @required ++ @optional
     assert demo_required == @required
-    assert demo_optional == @optional
   end
 
   test "should show reason when miss keys" do
     {:error, reason} = ExWechatPay.DemoPay.render("/pay/demo", %{})
 
-    assert reason ==  "still need post body keys: appid mch_id body out_trade_no"
+    assert reason ==  "Missed post body required keys: body out_trade_no"
   end
 
   test "should generate the right post body" do
     {:ok, body} = ExWechatPay.DemoPay.render("/pay/demo", @valid_map)
 
-    assert "<xml>" <> _  = body
+    assert "<xml>" <> _rest = body
   end
 end

@@ -60,8 +60,7 @@ defmodule ExWechatPay.Utils.ApiParser do
   defp parse_keys(string) do
     string
     |> String.trim
-    |> String.split(",")
-    |> Enum.map(&String.trim/1)
+    |> String.split(", ")
     |> Enum.map(&String.to_atom/1)
   end
 end
