@@ -38,7 +38,7 @@ defmodule ExWechatPay.Api do
       end
 
       defp process_url(url) do
-        case _sandbox do
+        case _sandbox() do
           false ->  "https://api.mch.weixin.qq.com" <> url
           true  ->  "https://api.mch.weixin.qq.com/sandbox" <> url
         end

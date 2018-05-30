@@ -7,6 +7,7 @@ defmodule ExWechatPay.Utils.NonceStr do
       |> :crypto.strong_rand_bytes
       |> Base.encode64
       |> binary_part(0, 32)
+      |> String.replace(~r/[=\/]/, "")
     post_map
     |> Map.put(:nonce_str, hash)
   end

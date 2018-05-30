@@ -27,7 +27,7 @@ optional: sign_type
 name: refund_order
 cert: true
 path: /secapi/pay/refund
-required: appid, mch_id, nonce_str, sign, transaction_id, out_trade_no, out_refund_no, total_fee, refund_fee, op_user_id
+required: appid, mch_id, nonce_str, sign, transaction_id, out_trade_no, out_refund_no, total_fee, refund_fee
 optional: device_info, sign_type, refund_fee_type, refund_account
 
 # Query for refund

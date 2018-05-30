@@ -7,7 +7,15 @@ defmodule ExWechatPay.Utils.Signature do
     |> joined_string
     |> add_appkey
     |> sign_hash
-    |> add_sign_to_map(post_map)
+    |> add_sign_to_map(post_map, :sign)
+  end
+
+  def jsapi_sign(map) do
+    map
+    |> joined_string
+    |> add_appkey
+    |> sign_hash
+    |> add_sign_to_map(map, :paySign)
   end
 
   defp joined_string(post_map) do
@@ -22,9 +30,9 @@ defmodule ExWechatPay.Utils.Signature do
   end
 
   defp add_appkey(string) do
-    case _sandbox do
+    case _sandbox() do
       true   ->  string <> "&key=ABCDEFGHIJKLMNOPQRSTUVWXYZ123456"
-      false  ->  string <> "&key=#{_appkey}"
+      false  ->  string <> "&key=#{_appkey()}"
     end
   end
 
@@ -32,7 +40,7 @@ defmodule ExWechatPay.Utils.Signature do
     :crypto.hash(:md5, string) |> Base.encode16
   end
 
-  defp add_sign_to_map(hash, map) do
-    map |> Map.put(:sign, hash)
+  defp add_sign_to_map(hash, map, key) do
+    map |> Map.put(key, hash)
   end
 end

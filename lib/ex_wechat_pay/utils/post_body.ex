@@ -21,12 +21,12 @@ defmodule ExWechatPay.Utils.PostBody do
 
   def add_config_data(body) do
     body
-    |> add_item({:appid, _appid})
-    |> add_item({:mch_id, _mch_id})
-    |> add_item({:op_user_id, _mch_id})
-    |> add_item({:wxappid, _appid})
-    |> add_item({:mch_appid, _appid})
-    |> add_item({:mchid, _mch_id})
+    |> add_item({:appid, _appid()})
+    |> add_item({:mch_id, _mch_id()})
+    |> add_item({:op_user_id, _mch_id()})
+    |> add_item({:wxappid, _appid()})
+    |> add_item({:mch_appid, _appid()})
+    |> add_item({:mchid, _mch_id()})
   end
 
   def add_nonce_str(body) do
@@ -45,25 +45,25 @@ defmodule ExWechatPay.Utils.PostBody do
   def validate_body(%PostBody{valid?: true,
                               map: %{transaction_id: _}} = body) do
     body
-    |> remove_need([:out_trade_no, :refund_id, :out_refund_no])
+    |> remove_need([:out_trade_no, :refund_id])
   end
 
   def validate_body(%PostBody{valid?: true,
                               map: %{out_trade_no: _}} = body) do
     body
-    |> remove_need([:transaction_id, :refund_id, :out_refund_no])
+    |> remove_need([:transaction_id, :refund_id])
   end
 
-  def validate_body(%PostBody{valid?: true,
-                              map: %{out_refund_no: _}} = body) do
-    body
-    |> remove_need([:refund_id, :out_trade_no, :transaction_id])
-  end
+  # def validate_body(%PostBody{valid?: true,
+  #                             map: %{out_refund_no: _}} = body) do
+  #   body
+  #   |> remove_need([:refund_id, :out_trade_no, :transaction_id])
+  # end
 
-  def validate_body(%PostBody{valid?: true,
-                              map: %{refund_id: _}} = body) do
-    body |> remove_need([:out_refund_no, :out_trade_no, :transaction_id])
-  end
+  # def validate_body(%PostBody{valid?: true,
+  #                             map: %{refund_id: _}} = body) do
+  #   body |> remove_need([:out_refund_no, :out_trade_no, :transaction_id])
+  # end
 
   def validate_body(%PostBody{valid?: true} = body), do: body
 

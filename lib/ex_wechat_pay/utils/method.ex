@@ -22,8 +22,10 @@ defmodule ExWechatPay.Utils.Method do
     methods = quote do
       defp do_request(path, body, cert \\ false)
       defp do_request(path, body, true) do
-        post(path, body, [], ssl: [certfile: unquote(_cert),
-                                   keyfile: unquote(_cert_key)])
+        IO.inspect body
+        post(path, body, [], ssl: [certfile: unquote(_cert()),
+                                   keyfile: unquote(_cert_key()),
+                                   versions: [:'tlsv1.2']])
         |> parse_response(path, body, true)
       end
       defp do_request(path, body, false) do
