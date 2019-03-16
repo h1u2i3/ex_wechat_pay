@@ -29,6 +29,17 @@ defmodule ExWechatPay.Api do
         |> render_body
       end
 
+      def process_url(url) do
+        case _sandbox() do
+          false -> "https://api.mch.weixin.qq.com" <> url
+          true -> "https://api.mch.weixin.qq.com/sandbox" <> url
+        end
+      end
+
+      def process_response_body("<xml>" <> _ = body), do: parse_xml(body)
+      def process_response_body("{" <> _ = body), do: Jason.decode!(body)
+      def process_response_body(body), do: body
+
       defp validate(body, _path) do
         body
         |> validate_body
@@ -36,18 +47,6 @@ defmodule ExWechatPay.Api do
         |> generate_miss_keys
         |> validate_presence
       end
-
-      defp process_url(url) do
-        case _sandbox() do
-          false -> "https://api.mch.weixin.qq.com" <> url
-          true -> "https://api.mch.weixin.qq.com/sandbox" <> url
-        end
-      end
-
-      defp process_response_body(body)
-      defp process_response_body("<xml>" <> _ = body), do: parse_xml(body)
-      defp process_response_body("{" <> _ = body), do: Jason.decode!(body)
-      defp process_response_body(body), do: body
 
       defoverridable validate: 2
     end
