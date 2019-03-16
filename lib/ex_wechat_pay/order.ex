@@ -7,14 +7,16 @@ defmodule ExWechatPay.Order do
 
   def jsapi_params(params) do
     # get prepay params from params
-    IO.inspect params
+    IO.inspect(params)
     prepay_params = _create_order(params)
 
     # %{return_code: "FAIL", return_msg: "appid and openid not match"}
-    IO.inspect prepay_params
+    IO.inspect(prepay_params)
+
     case prepay_params do
       %{return_code: "FAIL"} ->
         {:error, prepay_params.return_msg}
+
       %{return_code: "SUCCESS"} ->
         # before sign jsapi params
         jsapi_params = %{
@@ -24,6 +26,7 @@ defmodule ExWechatPay.Order do
           timeStamp: :os.system_time(:second),
           signType: "MD5"
         }
+
         # sign the jsapi params
         {:ok, ExWechatPay.Utils.Signature.jsapi_sign(jsapi_params)}
     end

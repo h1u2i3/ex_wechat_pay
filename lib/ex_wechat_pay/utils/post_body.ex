@@ -7,7 +7,7 @@ defmodule ExWechatPay.Utils.PostBody do
 
   alias __MODULE__
 
-  defstruct valid?: true, reason: nil,  map: %{}, required: [], miss: []
+  defstruct valid?: true, reason: nil, map: %{}, required: [], miss: []
 
   def cast(map, keys) do
     __MODULE__
@@ -42,14 +42,12 @@ defmodule ExWechatPay.Utils.PostBody do
   def validate_body(body)
   def validate_body(%PostBody{valid?: false} = body), do: body
 
-  def validate_body(%PostBody{valid?: true,
-                              map: %{transaction_id: _}} = body) do
+  def validate_body(%PostBody{valid?: true, map: %{transaction_id: _}} = body) do
     body
     |> remove_need([:out_trade_no, :refund_id])
   end
 
-  def validate_body(%PostBody{valid?: true,
-                              map: %{out_trade_no: _}} = body) do
+  def validate_body(%PostBody{valid?: true, map: %{out_trade_no: _}} = body) do
     body
     |> remove_need([:transaction_id, :refund_id])
   end
@@ -69,30 +67,37 @@ defmodule ExWechatPay.Utils.PostBody do
 
   def validate_presence(body)
   def validate_presence(%PostBody{valid?: true, miss: []} = body), do: body
-  def validate_presence(%PostBody{valid?: true, miss: _ } = body) do
+
+  def validate_presence(%PostBody{valid?: true, miss: _} = body) do
     body
     |> add_error(key_miss_message(body.miss))
   end
+
   def validate_presence(%PostBody{} = body), do: body
 
   def validate_jsapi(body)
-  def validate_jsapi(%PostBody{valid?: true,
-                               map: %{trade_type: "JSAPI"}} = body) do
+
+  def validate_jsapi(%PostBody{valid?: true, map: %{trade_type: "JSAPI"}} = body) do
     body |> add_required(:openid)
   end
-  def validate_jsapi(%PostBody{valid?: true } = body), do: body
+
+  def validate_jsapi(%PostBody{valid?: true} = body), do: body
   def validate_jsapi(%PostBody{valid?: false} = body), do: body
 
   def sign(body)
-  def sign(%PostBody{valid?: true } = body) do
+
+  def sign(%PostBody{valid?: true} = body) do
     body |> struct(map: body.map |> add_sign)
   end
+
   def sign(%PostBody{valid?: false} = body), do: body
 
   def render_body(body)
-  def render_body(%PostBody{valid?: true } = body) do
+
+  def render_body(%PostBody{valid?: true} = body) do
     {:ok, body.map |> render_xml}
   end
+
   def render_body(%PostBody{valid?: false} = body) do
     {:error, body.reason}
   end
@@ -125,7 +130,7 @@ defmodule ExWechatPay.Utils.PostBody do
     body |> struct(required: body.required -- keys)
   end
 
-  defp key_miss_message(keys)  do
+  defp key_miss_message(keys) do
     "Missed post body required keys: #{Enum.join(keys, " ")}"
   end
 

@@ -26,7 +26,7 @@ defmodule ExWechatPay.ApiTest do
   test "should show reason when miss keys" do
     {:error, reason} = ExWechatPay.DemoPay.render("/pay/demo", %{})
 
-    assert reason ==  "Missed post body required keys: body out_trade_no"
+    assert reason == "Missed post body required keys: body out_trade_no"
   end
 
   test "should generate the right post body" do

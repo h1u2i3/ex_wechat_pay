@@ -2,12 +2,14 @@ defmodule ExWechatPay.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :ex_wechat_pay,
-     version: "0.1.0",
-     elixir: "~> 1.6",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     deps: deps()]
+    [
+      app: :ex_wechat_pay,
+      version: "0.1.0",
+      elixir: "~> 1.6",
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      deps: deps()
+    ]
   end
 
   # Configuration for the OTP application

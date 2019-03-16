@@ -39,17 +39,17 @@ defmodule ExWechatPay.Api do
 
       defp process_url(url) do
         case _sandbox() do
-          false ->  "https://api.mch.weixin.qq.com" <> url
-          true  ->  "https://api.mch.weixin.qq.com/sandbox" <> url
+          false -> "https://api.mch.weixin.qq.com" <> url
+          true -> "https://api.mch.weixin.qq.com/sandbox" <> url
         end
       end
 
       defp process_response_body(body)
       defp process_response_body("<xml>" <> _ = body), do: parse_xml(body)
-      defp process_response_body("{"     <> _ = body), do: Poison.decode!(body)
-      defp process_response_body(body),                do: body
+      defp process_response_body("{" <> _ = body), do: Poison.decode!(body)
+      defp process_response_body(body), do: body
 
-      defoverridable [validate: 2]
+      defoverridable validate: 2
     end
   end
 
@@ -62,6 +62,7 @@ defmodule ExWechatPay.Api do
   @doc false
   def compile(origin) do
     ast_data = define_methods(origin)
+
     quote do
       unquote(ast_data)
     end
