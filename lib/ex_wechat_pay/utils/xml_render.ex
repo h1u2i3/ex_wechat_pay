@@ -10,7 +10,7 @@ defmodule ExWechatPay.Utils.XmlRender do
   defp render_item(item)
 
   defp render_item({key, value}) when is_map(value),
-    do: "<#{key}><![CDATA[#{Poison.encode!(value)}]]</#{key}>"
+    do: "<#{key}><![CDATA[#{Jason.encode!(value)}]]</#{key}>"
 
   defp render_item({key, value}), do: "<#{key}>#{value}</#{key}>"
 

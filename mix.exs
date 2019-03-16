@@ -31,10 +31,10 @@ defmodule ExWechatPay.Mixfile do
   defp deps do
     [
       {:ex_doc, github: "elixir-lang/ex_doc", only: :dev},
-      {:httpoison, "~> 1.1"},
-      {:poison, "~> 3.1"},
-      {:plug, "~> 1.5"},
-      {:floki, "~> 0.20.2"}
+      {:httpoison, "~> 1.5"},
+      {:jason, "~> 1.1"},
+      {:plug, "~> 1.7"},
+      {:floki, "~> 0.20.4"}
     ]
   end
 end
